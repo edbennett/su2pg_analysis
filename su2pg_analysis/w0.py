@@ -36,8 +36,7 @@ def get_args():
         "--plot_filename",
         default=None,
         help=(
-            "Where to output a plot of the flow."
-            "If not specified, no plot is generated"
+            "Where to output a plot of the flow.If not specified, no plot is generated"
         ),
     )
     parser.add_argument("--plot_styles", default=None, help="Plot style file to use")
@@ -222,7 +221,7 @@ def main():
         clover_flow = None
 
     if args.output_filename is None:
-        print(f"plaquette_w0: {plaquette_w0}, " f"clover_w0: {clover_w0}")
+        print(f"plaquette_w0: {plaquette_w0}, clover_w0: {clover_w0}")
     else:
         pe.input.json.dump_dict_to_json(
             {
