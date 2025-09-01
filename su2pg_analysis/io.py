@@ -23,7 +23,7 @@ def merge_metadata(old_metadata, new_metadata):
     Update an existing set of metadata with some extra data,
     ensuring that any common keys have consistent values.
     """
-    for key, value in new_metadata:
+    for key, value in new_metadata.items():
         if key in old_metadata:
             if old_metadata[key] != value:
                 raise ValueError("Inconsistent metadata.")
@@ -37,6 +37,8 @@ def get_data(filenames):
     for filename in filenames:
         read_datum = pe.input.json.load_json(filename, verbose=False, full_output=True)
         metadata = read_datum["description"]
+        if "description" in metadata:
+            metadata = metadata["description"]
         ensemble_id = name_ensemble(metadata)
         if ensemble_id not in data:
             data[ensemble_id] = metadata

@@ -62,6 +62,11 @@ def get_args():
     return parser.parse_args()
 
 
+def lattice_volume(metadata, kind="global"):
+    temporal_factor = {"global": metadata["nt"], "spatial": 1}[kind]
+    return metadata["nx"] * metadata["ny"] * metadata["nz"] * temporal_factor
+
+
 def main():
     """
     Compute the mass of a given channel
@@ -83,7 +88,7 @@ def main():
         pe.input.json.dump_dict_to_json(
             {
                 "mass": mass,
-                "amplitude": amplitude,
+                "amplitude": amplitude * lattice_volume(metadata, "spatial") ** 0.5,
             },
             args.output_filename,
             description=metadata,

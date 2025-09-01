@@ -188,6 +188,31 @@ def check_observable_common(line, metadata, current_datum):
     return trajectory
 
 
+def check_representation(line, metadata):
+    if not line.startswith("[SYSTEM][0]MACROS=-D"):
+        return
+    representation = None
+    if "REPR_FUNDAMENTAL" in line:
+        representation = "fun"
+    if "REPR_ADJOINT" in line:
+        if representation:
+            raise NotImplementedError("Multi-representation correlators not supported.")
+        representation = "adj"
+    if "REPR_SYMMETRIC" in line:
+        if representation:
+            raise NotImplementedError("Multi-representation correlators not supported.")
+        representation = "sym"
+    if "REPR_ANTISYMMETRIC" in line:
+        if representation:
+            raise NotImplementedError("Multi-representation correlators not supported.")
+        representation = "asy"
+
+    if "representation" in metadata and metadata["representation"] != representation:
+        raise ValueError("Inconsistent representations.")
+
+    metadata["representation"] = representation
+
+
 def read_correlators(filename):
     """
     Read a HiRep meson correlation function log.
@@ -210,6 +235,7 @@ def read_correlators(filename):
             trajectory = (
                 check_observable_common(line, metadata, current_datum) or trajectory
             )
+            check_representation(line, metadata)
             if line.startswith("[MAIN][0]Configuration from "):
                 current_datum = {"trajectory": trajectory, "correlators": {}}
 
