@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from .io import get_data
 
 
-def get_args(description):
+def get_args(description, extra_options):
     """
     Parse command line arguments.
     """
@@ -23,6 +23,8 @@ def get_args(description):
     )
     parser.add_argument("--output_filename", default=None, help="Where to put the plot")
     parser.add_argument("--plot_styles", default=None, help="Plot style file to use")
+    for name, kwargs in extra_options.items():
+        parser.add_argument(name, **kwargs)
     return parser.parse_args()
 
 
@@ -39,17 +41,17 @@ def save_or_show(fig, output_filename):
     plt.close(fig)
 
 
-def basic_plot(plot_callback, description=None):
+def basic_plot(plot_callback, description=None, extra_options={}):
     """
     Perform a simple plot,
     where one set of data is read,
     and one plot is generated.
     """
-    args = get_args(description)
+    args = get_args(description, extra_options)
     if args.plot_styles is not None:
         plt.style.use(args.plot_styles)
     data = get_data(args.data_filenames)
-    fig = plot_callback(data)
+    fig = plot_callback(data, *[getattr(args, option) for option in extra_options])
     save_or_show(fig, args.output_filename)
 
 
