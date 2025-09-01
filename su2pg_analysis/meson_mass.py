@@ -27,9 +27,24 @@ def get_args():
     """
     parser = ArgumentParser()
     parser.add_argument("correlator_log", help="Correlator computation log file")
-    parser.add_argument("--channel", choices=list(IMPLEMENTED_CHANNELS.keys()), default="ps", help="Which channel to fit")
-    parser.add_argument("--plateau_start", required=True, type=int, help="Time slice at which plateau starts")
-    parser.add_argument("--plateau_end", required=True, type=int, help="Time slice at which plateau ends")
+    parser.add_argument(
+        "--channel",
+        choices=list(IMPLEMENTED_CHANNELS.keys()),
+        default="ps",
+        help="Which channel to fit",
+    )
+    parser.add_argument(
+        "--plateau_start",
+        required=True,
+        type=int,
+        help="Time slice at which plateau starts",
+    )
+    parser.add_argument(
+        "--plateau_end",
+        required=True,
+        type=int,
+        help="Time slice at which plateau ends",
+    )
     parser.add_argument(
         "--output_filename",
         default=None,
@@ -63,10 +78,7 @@ def main():
 
     mass, amplitude = fit_result.fit_parameters
     if args.output_filename is None:
-        print(
-            f"mass: {mass}, "
-            f"amplitude: {amplitude}"
-        )
+        print(f"mass: {mass}, " f"amplitude: {amplitude}")
     else:
         pe.input.json.dump_dict_to_json(
             {

@@ -4,7 +4,6 @@
 Read and write files
 """
 
-
 import pyerrors as pe
 
 

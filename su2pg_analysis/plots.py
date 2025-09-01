@@ -4,7 +4,6 @@
 Shared tools for plotting
 """
 
-
 from argparse import ArgumentParser
 
 import matplotlib.pyplot as plt
@@ -61,10 +60,16 @@ def split_errors(data):
     (or None otherwise).
     """
     if any(hasattr(datum, "gamma_method") for datum in data):
-        return tuple(zip(*[
-            (datum.value, datum.dvalue) if hasattr(datum, "dvalue") else (datum, None)
-            for datum in data
-        ]))
+        return tuple(
+            zip(
+                *[
+                    (datum.value, datum.dvalue)
+                    if hasattr(datum, "dvalue")
+                    else (datum, None)
+                    for datum in data
+                ]
+            )
+        )
     else:
         return data, None
 
@@ -77,5 +82,10 @@ def errorbar_pyerrors(ax, x_data, y_data, **kwargs):
     x_values, x_errors = split_errors(x_data)
     y_values, y_errors = split_errors(y_data)
     return ax.errorbar(
-        x_values, y_values, xerr=x_errors, yerr=y_errors, ls="none", **kwargs,
+        x_values,
+        y_values,
+        xerr=x_errors,
+        yerr=y_errors,
+        ls="none",
+        **kwargs,
     )

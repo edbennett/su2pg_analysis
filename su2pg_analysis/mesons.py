@@ -21,8 +21,9 @@ def get_channel(correlators, channel):
     If multiple matches, or no matches, are found,
     raise an error.
     """
-    matching_correlator, = [
-        (key, correlator) for key, correlator in correlators.items()
+    (matching_correlator,) = [
+        (key, correlator)
+        for key, correlator in correlators.items()
         if key[-1] == channel
     ]
     return matching_correlator
@@ -34,7 +35,9 @@ def get_pyerrors_correlator(correlator, name, indices):
     and turn it into a 1D pyerrors Corr object.
     """
     observables = [
-        pe.Obs([timeslice.real], [name], idl=[indices])  # Force taking real part, so symmetrisation works correctly
+        pe.Obs(
+            [timeslice.real], [name], idl=[indices]
+        )  # Force taking real part, so symmetrisation works correctly
         for timeslice in correlator.swapaxes(0, 1)
     ]
     return pe.Corr(observables)
@@ -48,8 +51,7 @@ def get_correlators_from_file(filename, input_channel):
     metadata, data = read_correlators(filename)
     implemented_channels = IMPLEMENTED_CHANNELS[input_channel]
     component_correlators = [
-        get_channel(data["correlators"], channel)
-        for channel in implemented_channels
+        get_channel(data["correlators"], channel) for channel in implemented_channels
     ]
     assert len(set(tuple(key[:3]) for key, _ in component_correlators)) == 1
     metadata["mass"] = component_correlators[0][0][0]

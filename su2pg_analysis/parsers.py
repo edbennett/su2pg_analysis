@@ -32,7 +32,7 @@ def get_time(line, skip=0):
 
     skip: number of extra fields printed at the end of the line to strip out.
     """
-    line = " ".join(line.split()[:len(line.split()) - skip])
+    line = " ".join(line.split()[: len(line.split()) - skip])
     if not line.endswith("usec]"):
         raise ParseError(f"No time found in line {line}")
     split_line = line.split()
@@ -101,7 +101,7 @@ def read_pg(filename):
         "plaquette": [],
         "generation_time": [],
         "filename": [],
-        "save_time": []
+        "save_time": [],
     }
     current_datum = None
 
@@ -128,7 +128,8 @@ def read_pg(filename):
             if line.startswith("[MAIN][0]Plaquette"):
                 add_metadatum(current_datum, "plaquette", float(line.split()[-1]))
             if (
-                line.startswith("[IO][0]Configuration") and line.split()[2] == "saved"
+                line.startswith("[IO][0]Configuration")
+                and line.split()[2] == "saved"
                 and current_datum is not None
             ):
                 add_metadatum(current_datum, "filename", line.split()[1].strip("[]"))
@@ -151,7 +152,7 @@ def complete_configuration(data, datum):
         elif isinstance(values, dict):
             if values == {}:
                 for subkey, subvalue in datum[key].items():
-                    values[subkey] =  [subvalue]
+                    values[subkey] = [subvalue]
             else:
                 value = datum[key]
                 assert values.keys() == value.keys()
@@ -169,7 +170,7 @@ def check_observable_common(line, metadata, current_datum):
     check_common(line, metadata)
     trajectory = None
     if line.startswith("[MAIN][0]Configuration from "):
-        trajectory, = map(int, re.match(".*n([0-9]+)$", line.split()[-1]).groups())
+        (trajectory,) = map(int, re.match(".*n([0-9]+)$", line.split()[-1]).groups())
         beta = float(re.match(".*b([0-9]+[.][0-9]+)", line.split()[-1]).groups()[0])
         add_metadatum(metadata, "beta", beta)
     if line.startswith("[IO][0]Configuration [") and line.split()[2] == "read":
@@ -183,7 +184,7 @@ def check_observable_common(line, metadata, current_datum):
         split_line = line.split()
         real_plaquette = float(split_line[3])
         imaginary_plaquette = float(split_line[5])
-        current_datum["plaquette"][mu_nu] = real_plaquette + imaginary_plaquette * 1J
+        current_datum["plaquette"][mu_nu] = real_plaquette + imaginary_plaquette * 1j
     return trajectory
 
 
@@ -206,9 +207,10 @@ def read_correlators(filename):
     trajectory = None
     with open(filename, "r", encoding="utf-8") as corr_file:
         for line in corr_file:
-            trajectory = check_observable_common(line, metadata, current_datum) or trajectory
+            trajectory = (
+                check_observable_common(line, metadata, current_datum) or trajectory
+            )
             if line.startswith("[MAIN][0]Configuration from "):
-                previous_datum = current_datum
                 current_datum = {"trajectory": trajectory, "correlators": {}}
 
             if line.startswith("[MAIN][0]conf #"):
@@ -219,15 +221,24 @@ def read_correlators(filename):
                 channel = split_line[5].rstrip("=")
                 correlator = np.array(list(map(float, split_line[6:])))
                 if channel.endswith("_im"):
-                    current_datum["correlators"][valence_mass, source_type, connection, channel[:-3]] = (
-                        current_datum["correlators"][valence_mass, source_type, connection, channel[:-3]]
-                        + correlator * 1J
+                    current_datum["correlators"][
+                        valence_mass, source_type, connection, channel[:-3]
+                    ] = (
+                        current_datum["correlators"][
+                            valence_mass, source_type, connection, channel[:-3]
+                        ]
+                        + correlator * 1j
                     )
                 else:
                     if channel.endswith("_re"):
                         channel = channel[:-3]
-                    current_datum["correlators"][valence_mass, source_type, connection, channel] = correlator
-            if line.startswith("[MAIN][0]Configuration #") and line.split()[2:4] == ["analysed", "in"]:
+                    current_datum["correlators"][
+                        valence_mass, source_type, connection, channel
+                    ] = correlator
+            if line.startswith("[MAIN][0]Configuration #") and line.split()[2:4] == [
+                "analysed",
+                "in",
+            ]:
                 current_datum["analysis_time"] = get_time(line)
                 complete_configuration(data, current_datum)
 
@@ -256,9 +267,10 @@ def read_flows(filename):
     trajectory = None
     with open(filename, "r", encoding="utf-8") as wflow_file:
         for line in wflow_file:
-            trajectory = check_observable_common(line, metadata, current_datum) or trajectory
+            trajectory = (
+                check_observable_common(line, metadata, current_datum) or trajectory
+            )
             if line.startswith("[MAIN][0]Configuration from "):
-                previous_datum = current_datum
                 current_datum = {
                     "trajectory": trajectory,
                     "topological_charges": [],
@@ -273,11 +285,16 @@ def read_flows(filename):
                 current_datum["plaquette_energy_densities"].append(float(split_line[4]))
                 current_datum["clover_energy_densities"].append(float(split_line[6]))
                 current_datum["topological_charges"].append(float(split_line[8]))
-            if line.startswith("[TIMING][0]Wilson Flow evolution and measurements for configuration") and line.split()[8] == "done":
+            if (
+                line.startswith(
+                    "[TIMING][0]Wilson Flow evolution and measurements for configuration"
+                )
+                and line.split()[8] == "done"
+            ):
                 current_datum["analysis_time"] = get_time(line)
                 complete_configuration(data, current_datum)
 
-    unique_flow_times, = list(
+    (unique_flow_times,) = list(
         set(tuple(flow_times) for flow_times in data["flow_times"])
     )
     data["flow_times"] = list(unique_flow_times)

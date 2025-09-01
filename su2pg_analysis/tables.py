@@ -4,11 +4,8 @@
 Shared tools for tabulation
 """
 
-
 from argparse import ArgumentParser, FileType
 
-from format_multiple_errors import format_column_errors
-import pandas as pd
 
 from .io import get_data
 from .provenance import get_basic_metadata, text_metadata

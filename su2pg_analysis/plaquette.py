@@ -4,7 +4,6 @@
 Computation of the mean plaquette for an ensemble.
 """
 
-
 from argparse import ArgumentParser
 
 import pyerrors as pe
@@ -44,7 +43,9 @@ def main():
         print(plaquette)
     else:
         pe.input.json.dump_to_json(
-            plaquette, args.output_filename, description=metadata,
+            plaquette,
+            args.output_filename,
+            description=metadata,
         )
 
 

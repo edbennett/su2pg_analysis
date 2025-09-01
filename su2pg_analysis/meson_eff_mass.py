@@ -18,7 +18,12 @@ def get_args():
     """
     parser = ArgumentParser()
     parser.add_argument("correlator_log", help="Correlator computation log file")
-    parser.add_argument("--channel", choices=list(LATEX_DESCRIPTIONS.keys()), default="ps", help="Which channel to fit")
+    parser.add_argument(
+        "--channel",
+        choices=list(LATEX_DESCRIPTIONS.keys()),
+        default="ps",
+        help="Which channel to fit",
+    )
     parser.add_argument(
         "--output_filename",
         default=None,
@@ -43,7 +48,7 @@ def get_slice(plateau, metadata):
     desired_context = (plateau_end - plateau_start) // 2
     return slice(
         max(min(plateau_start, 2), plateau_start - desired_context),
-        min(max_time, plateau_end + desired_context)
+        min(max_time, plateau_end + desired_context),
     )
 
 
@@ -63,7 +68,12 @@ def plot_eff_mass(correlator, metadata, plateau=(None, None)):
     timeslice, eff_mass_value, eff_mass_uncertainty = eff_mass.plottable()
 
     plateau_slice = get_slice(plateau, metadata)
-    ax.errorbar(timeslice[plateau_slice], eff_mass_value[plateau_slice], yerr=eff_mass_uncertainty[plateau_slice], ls="none")
+    ax.errorbar(
+        timeslice[plateau_slice],
+        eff_mass_value[plateau_slice],
+        yerr=eff_mass_uncertainty[plateau_slice],
+        ls="none",
+    )
 
     ax.set_title(
         (
@@ -87,7 +97,9 @@ def add_mass_band(fig, mass, plateau):
     plateau_start, plateau_end = plateau
     ax.axvline(plateau_start - 0.5, dashes=(2, 3))
     ax.axvline(plateau_end - 0.5, dashes=(2, 3))
-    ax.axhspan(mass.value - mass.dvalue, mass.value + mass.dvalue, alpha=0.3, color="black")
+    ax.axhspan(
+        mass.value - mass.dvalue, mass.value + mass.dvalue, alpha=0.3, color="black"
+    )
     ax.axhline(mass.value, color="black")
 
 

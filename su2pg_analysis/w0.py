@@ -65,7 +65,7 @@ def quadratic_fit_form(params, t):
     a = params[0]
     b = params[1]
     c = params[2]
-    return a * t ** 2 + b * t + c
+    return a * t**2 + b * t + c
 
 
 def get_quadratic_left_solution(a, b, c):
@@ -76,8 +76,8 @@ def get_quadratic_left_solution(a, b, c):
     # Could do this in a more sophisticated way by checking signs,
     # but this is probably quicker.
     return min(
-        (-b - (b ** 2 - 4 * a * c) ** 0.5) / (2 * a),
-        (-b + (b ** 2 - 4 * a * c) ** 0.5) / (2 * a),
+        (-b - (b**2 - 4 * a * c) ** 0.5) / (2 * a),
+        (-b + (b**2 - 4 * a * c) ** 0.5) / (2 * a),
     )
 
 
@@ -89,7 +89,7 @@ def compute_w0(times, energy_densities, name, indices, threshold):
 
     See 1203.4469 equations (2) and (3).
     """
-    raw_t2E = times ** 2 * energy_densities  # t^2 E, numpy array
+    raw_t2E = times**2 * energy_densities  # t^2 E, numpy array
     t2E = get_pyerrors_correlator(raw_t2E, name, indices)  # t^2 E, pyerrors Corr
     dt2E_dt = t2E.deriv()  # d(t^2 E) / dt
     dt2E_dt.gamma_method()
@@ -131,7 +131,15 @@ def compute_w0(times, energy_densities, name, indices, threshold):
     return w0, t_dt2E_dt_corr
 
 
-def plot_flow(plaquette_flow, clover_flow, metadata, threshold, time_step, plaquette_w0=None, clover_w0=None):
+def plot_flow(
+    plaquette_flow,
+    clover_flow,
+    metadata,
+    threshold,
+    time_step,
+    plaquette_w0=None,
+    clover_w0=None,
+):
     fig, ax = plt.subplots(layout="constrained")
 
     ax.set_xlabel("$t$")
@@ -144,12 +152,25 @@ def plot_flow(plaquette_flow, clover_flow, metadata, threshold, time_step, plaqu
         ]
     ):
         plot_x, plot_y, plot_yerr = flow.plottable()
-        ax.errorbar(np.array(plot_x) * time_step, plot_y, yerr=plot_yerr, ls="none", label=label, marker=marker, color=f"C{colour_idx}")
+        ax.errorbar(
+            np.array(plot_x) * time_step,
+            plot_y,
+            yerr=plot_yerr,
+            ls="none",
+            label=label,
+            marker=marker,
+            color=f"C{colour_idx}",
+        )
         if w0 is not None:
-            t_w0 = w0 ** 2
+            t_w0 = w0**2
             t_w0.gamma_method()
             ax.axvline(t_w0.value, color=f"C{colour_idx}", dashes=(2, 3))
-            ax.axvspan(t_w0.value - t_w0.dvalue, t_w0.value + t_w0.dvalue, color=f"C{colour_idx}", alpha=0.2)
+            ax.axvspan(
+                t_w0.value - t_w0.dvalue,
+                t_w0.value + t_w0.dvalue,
+                color=f"C{colour_idx}",
+                alpha=0.2,
+            )
 
     ax.legend(loc="best")
     ax.set_title(
@@ -201,10 +222,7 @@ def main():
         clover_flow = None
 
     if args.output_filename is None:
-        print(
-            f"plaquette_w0: {plaquette_w0}, "
-            f"clover_w0: {clover_w0}"
-        )
+        print(f"plaquette_w0: {plaquette_w0}, " f"clover_w0: {clover_w0}")
     else:
         pe.input.json.dump_dict_to_json(
             {
@@ -218,7 +236,13 @@ def main():
     if args.plot_filename:
         plt.style.use(args.plot_styles)
         plot_flow(
-            plaquette_flow, clover_flow, metadata, w0_threshold, time_step, plaquette_w0, clover_w0
+            plaquette_flow,
+            clover_flow,
+            metadata,
+            w0_threshold,
+            time_step,
+            plaquette_w0,
+            clover_w0,
         ).savefig(args.plot_filename)
 
 
