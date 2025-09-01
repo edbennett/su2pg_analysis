@@ -14,6 +14,11 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
+dependencies = [
+    "matplotlib",
+    "numpy",
+    "pyerrors",
+]
 
 [project.urls]
 "Homepage" = "https://github.com/edbennett/su2pg_analysis"
