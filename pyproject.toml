@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "su2pg_analysis"
+version = "0.0.1"
+authors = [{name="Ed Bennett", email="e.j.bennett@swansea.ac.uk"}]
+description = "A toy library to analyse SU(2) data."
+readme = "README.md"
+requires-python = ">= 3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/edbennett/su2pg_analysis"
+"Bug Tracker" = "https://github.com/edbennett/su2pg_analysis/issues"
+
+[tool.coverage.report]
+exclude_lines = [
+    "if __name__ == .__main__.:"
+]
