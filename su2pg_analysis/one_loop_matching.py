@@ -13,11 +13,13 @@ def get_args():
         description="Normalise decay constants with one-loop matching coefficients",
     )
     parser.add_argument(
-        "spectral_observable_data",
+        "--spectral_observable_data",
+        required=True,
         help="File containing computed spectral quantities for a given symmetry channel",
     )
     parser.add_argument(
-        "plaquette_data",
+        "--plaquette_data",
+        required=True,
         help="File containing computed mean plaquette.",
     )
     parser.add_argument(
