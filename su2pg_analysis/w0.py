@@ -142,7 +142,7 @@ def plot_flow(
 ):
     fig, ax = plt.subplots(layout="constrained")
 
-    ax.set_xlabel("$t$")
+    ax.set_xlabel("$t / a$")
     ax.set_ylabel(r"$t\frac{\mathrm{d}\langle{t^2 E\rangle}}{\mathrm{d}t}$")
 
     for colour_idx, (flow, label, marker, w0) in enumerate(
