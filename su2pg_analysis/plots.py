@@ -51,7 +51,10 @@ def basic_plot(plot_callback, description=None, extra_options={}):
     if args.plot_styles is not None:
         plt.style.use(args.plot_styles)
     data = get_data(args.data_filenames)
-    fig = plot_callback(data, *[getattr(args, option) for option in extra_options])
+    fig = plot_callback(
+        data,
+        *[getattr(args, option.lstrip("-")) for option in extra_options],
+    )
     save_or_show(fig, args.output_filename)
 
 
