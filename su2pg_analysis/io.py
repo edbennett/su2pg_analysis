@@ -31,25 +31,42 @@ def merge_metadata(old_metadata, new_metadata):
             old_metadata[key] = value
 
 
+def channelise_tag(bare_tag, channel):
+    if not channel:
+        return bare_tag
+
+    return f"{channel}_{bare_tag}"
+
+
+def label_obs_channels(datum):
+    metadata = datum["description"]
+    channel = metadata.pop("channel", None)
+    datum["obsdata"] = {
+        channelise_tag(bare_tag, channel): value
+        for bare_tag, value in datum["obsdata"].items()
+    }
+
+
 def get_data(filenames):
     """Read data from filenames, and arrange into a hierarchical structure."""
     data = {}
     for filename in filenames:
-        read_datum = pe.input.json.load_json(filename, verbose=False, full_output=True)
+        read_datum = pe.input.json.load_json_dict(
+            filename, verbose=False, full_output=True
+        )
+        label_obs_channels(read_datum)
         metadata = read_datum["description"]
-        if "description" in metadata:
-            metadata = metadata["description"]
         ensemble_id = name_ensemble(metadata)
         if ensemble_id not in data:
             data[ensemble_id] = metadata
         else:
             merge_metadata(data[ensemble_id], metadata)
-        obs_datum = read_datum["obsdata"][0]
-        if obs_datum.tag in data[ensemble_id]:
-            raise ValueError(f"Duplicate data for {obs_datum.tag} for {ensemble_id}")
+        for tag, value in read_datum["obsdata"].items():
+            if tag in data[ensemble_id]:
+                raise ValueError(f"Duplicate data for {tag} for {ensemble_id}")
 
-        obs_datum.gamma_method()
-        data[ensemble_id][obs_datum.tag] = obs_datum
+            value.gamma_method()
+            data[ensemble_id][tag] = value
 
     all_keys = set(key for datum in data.values() for key in datum.keys())
     reordered_data = {key: [] for key in all_keys}

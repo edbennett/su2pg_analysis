@@ -42,8 +42,8 @@ def main():
     if args.output_filename is None:
         print(plaquette)
     else:
-        pe.input.json.dump_to_json(
-            plaquette,
+        pe.input.json.dump_dict_to_json(
+            {"plaquette": plaquette},
             args.output_filename,
             description=metadata,
         )

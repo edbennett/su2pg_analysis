@@ -98,7 +98,7 @@ def main():
     else:
         pe.input.json.dump_dict_to_json(
             {
-                f"{channel}_decay_const": result,
+                "decay_const": result,
             },
             args.output_filename,
             description=spectrum_data["description"],
