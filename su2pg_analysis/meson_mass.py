@@ -83,7 +83,7 @@ def main():
 
     mass, amplitude = fit_result.fit_parameters
     if args.output_filename is None:
-        print(f"mass: {mass}, " f"amplitude: {amplitude}")
+        print(f"mass: {mass}, amplitude: {amplitude}")
     else:
         pe.input.json.dump_dict_to_json(
             {
