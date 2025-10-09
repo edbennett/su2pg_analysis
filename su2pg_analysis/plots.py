@@ -7,6 +7,7 @@ Shared tools for plotting
 from argparse import ArgumentParser
 
 import matplotlib.pyplot as plt
+import numpy as np
 from .io import get_data
 
 
@@ -70,13 +71,13 @@ def split_errors(data):
                 *[
                     (datum.value, datum.dvalue)
                     if hasattr(datum, "dvalue")
-                    else (datum, None)
+                    else (datum, np.nan)
                     for datum in data
                 ]
             )
         )
     else:
-        return data, None
+        return data, np.nan
 
 
 def errorbar_pyerrors(ax, x_data, y_data, **kwargs):

@@ -4,6 +4,7 @@
 Read and write files
 """
 
+import numpy as np
 import pyerrors as pe
 
 
@@ -72,6 +73,6 @@ def get_data(filenames):
     reordered_data = {key: [] for key in all_keys}
     for datum in data.values():
         for key in all_keys:
-            reordered_data[key].append(datum.get(key))
+            reordered_data[key].append(datum.get(key, np.nan))
 
     return reordered_data
