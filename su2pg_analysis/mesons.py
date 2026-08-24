@@ -9,7 +9,6 @@ import pyerrors as pe
 from .io import name_ensemble
 from .parsers import read_correlators
 
-
 IMPLEMENTED_CHANNELS = {"ps": ["g5"], "v": ["g1", "g2", "g3"]}
 LATEX_DESCRIPTIONS = {"ps": r"\pi", "v": r"\rho"}
 

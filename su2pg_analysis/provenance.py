@@ -4,13 +4,14 @@
 Tools for annotating output with provenance information.
 """
 
-from datetime import datetime, timezone
 import hashlib
 import os
 import pathlib
-import psutil
 import socket
 import subprocess
+from datetime import datetime, timezone
+
+import psutil
 
 
 def get_commit_id():

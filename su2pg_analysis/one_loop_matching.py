@@ -2,8 +2,8 @@
 
 from argparse import ArgumentParser
 
-from numpy import pi
 import pyerrors as pe
+from numpy import pi
 
 from .io import get_data
 
