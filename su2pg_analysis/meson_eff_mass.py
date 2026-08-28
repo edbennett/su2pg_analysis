@@ -8,7 +8,7 @@ from argparse import ArgumentParser
 
 import matplotlib.pyplot as plt
 
-from .mesons import get_correlators_from_file, LATEX_DESCRIPTIONS
+from .mesons import LATEX_DESCRIPTIONS, get_correlators_from_file
 from .plots import save_or_show
 
 

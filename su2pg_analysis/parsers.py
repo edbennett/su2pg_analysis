@@ -256,8 +256,7 @@ def read_correlators(filename):
                         + correlator * 1j
                     )
                 else:
-                    if channel.endswith("_re"):
-                        channel = channel[:-3]
+                    channel = channel.removesuffix("_re")
                     current_datum["correlators"][
                         valence_mass, source_type, connection, channel
                     ] = correlator

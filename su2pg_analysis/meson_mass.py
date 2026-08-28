@@ -6,13 +6,13 @@ Computation of the meson mass from the correlator given the plateau range.
 
 from argparse import ArgumentParser
 from functools import partial
-import matplotlib.pyplot as plt
 
+import matplotlib.pyplot as plt
 import pyerrors as pe
 from autograd.numpy import exp
 
-from .mesons import get_correlators_from_file, IMPLEMENTED_CHANNELS
-from .meson_eff_mass import plot_eff_mass, add_mass_band
+from .meson_eff_mass import add_mass_band, plot_eff_mass
+from .mesons import IMPLEMENTED_CHANNELS, get_correlators_from_file
 
 
 def fit_form(params, t, NT=None):
@@ -83,7 +83,7 @@ def main():
 
     mass, amplitude = fit_result.fit_parameters
     if args.output_filename is None:
-        print(f"mass: {mass}, " f"amplitude: {amplitude}")
+        print(f"mass: {mass}, amplitude: {amplitude}")
     else:
         pe.input.json.dump_dict_to_json(
             {

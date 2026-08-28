@@ -6,7 +6,6 @@ Shared tools for tabulation
 
 from argparse import ArgumentParser, FileType
 
-
 from .io import get_data
 from .provenance import get_basic_metadata, text_metadata
 

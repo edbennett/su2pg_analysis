@@ -222,7 +222,7 @@ def main():
         clover_flow = None
 
     if args.output_filename is None:
-        print(f"plaquette_w0: {plaquette_w0}, " f"clover_w0: {clover_w0}")
+        print(f"plaquette_w0: {plaquette_w0}, clover_w0: {clover_w0}")
     else:
         pe.input.json.dump_dict_to_json(
             {

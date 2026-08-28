@@ -8,6 +8,7 @@ from argparse import ArgumentParser
 
 import matplotlib.pyplot as plt
 import numpy as np
+
 from .io import get_data
 
 
