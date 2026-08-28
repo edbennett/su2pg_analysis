@@ -234,7 +234,8 @@ def main():
         )
 
     if args.plot_filename:
-        plt.style.use(args.plot_styles)
+        if args.plot_styles is not None:
+            plt.style.use(args.plot_styles)
         plot_flow(
             plaquette_flow,
             clover_flow,
