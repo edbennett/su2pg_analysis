@@ -5,6 +5,7 @@ Tools for annotating output with provenance information.
 """
 
 from datetime import datetime, timezone
+import getpass
 import hashlib
 import os
 import pathlib
@@ -38,7 +39,7 @@ def get_basic_metadata(*data_filenames):
     )
     metadata["workflow_run"] = {
         "completed": now,
-        "user_name": os.getlogin(),
+        "user_name": getpass.getuser(),
         "machine_name": socket.gethostname(),
     }
     metadata["analysis_code"] = {"version": get_commit_id()}
