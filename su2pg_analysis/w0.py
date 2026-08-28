@@ -36,8 +36,8 @@ def get_args():
         "--plot_filename",
         default=None,
         help=(
-            "Where to output a plot of the flow."
-            "If not specified, no plot is generated"
+            "Where to output a plot of the flow. "
+            "If not specified, no plot is generated."
         ),
     )
     parser.add_argument("--plot_styles", default=None, help="Plot style file to use")
